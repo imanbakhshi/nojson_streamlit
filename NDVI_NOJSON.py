@@ -184,8 +184,8 @@ if uploaded_file:
             Map = geemap.Map(center=[gdf.geometry.centroid.y.mean(), gdf.geometry.centroid.x.mean()], zoom=8)
             Map.add_basemap("OpenStreetMap")
             Map.add_basemap("HYBRID")
-            Map.addLayer(ndvi, {'min': 0, 'max': 1, 'palette': ['white', 'green']}, "NDVI", False)
-            Map.addLayer(mndwi, {'min': -1, 'max': 1, 'palette': ['red', 'blue']}, "MNDWI", False)
+            Map.addLayer(ndvi, {'min': 0, 'max': 1, 'palette': ['white', 'green']}, "Crop Detection", False)
+            Map.addLayer(mndwi, {'min': -1, 'max': 1, 'palette': ['red', 'blue']}, "Water Body", False)
             Map.addLayer(image, {'min': 0, 'max': 3000, 'bands': ["B4", "B3", "B2"]}, "True Color", True)
             Map.addLayer(region, {}, "Shapefile")
 
@@ -195,14 +195,14 @@ if uploaded_file:
             if st.button("Download Image"):
                 download_choice = st.radio(
                     "کدام تصویر را می خواهید دانلود کنید؟",
-                    ("NDVI", "MNDWI")  # حذف گزینه True Color از این لیست
+                    ("Crop Detection", "Water Body")  # حذف گزینه True Color از این لیست
                 )
 
                 # بخش دانلود تصاویر
                 st.subheader("Download Image")
                 if download_choice == "NDVI":
-                    download_image(ndvi, "ndvi_image.tif", region, scale)
+                    download_image(ndvi, "Crop-Detection.tif", region, scale)
                 elif download_choice == "MNDWI":
-                    download_image(mndwi, "mndwi_image.tif", region, scale)
+                    download_image(mndwi, "Water-Body.tif", region, scale)
     except Exception as e:
         st.error(f"خطا در پردازش Shapefile یا محاسبه شاخص‌ها: {str(e)}")
