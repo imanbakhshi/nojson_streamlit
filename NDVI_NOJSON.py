@@ -52,7 +52,7 @@ credentials = service_account.Credentials.from_service_account_info(
 # مقداردهی اولیه Google Earth Engine
 try:
     ee.Initialize(credentials)
-    st.success("Google Earth Engine Initialized Successfully! ✅")
+    st.success("Initialized Successfully! ✅")
 except Exception as e:
     st.error(f"Initialization Failed: {e}")
 # آپلود فایل ZIP شامل Shapefile
