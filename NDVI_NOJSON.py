@@ -100,6 +100,7 @@
 # download_image(ndvi, "ndvi_image.tif", region, scale)
 # download_image(mndwi, "mndwi_image.tif", region, scale)
 
+
 import streamlit as st
 import geopandas as gpd
 import ee
@@ -182,6 +183,20 @@ if uploaded_file:
             Map.addLayer(region, {}, "Shapefile")
 
             Map.to_streamlit(height=600)
+
+            # اضافه کردن دکمه برای نمایش radiobutton
+            if st.button("Download Image"):
+                download_choice = st.radio(
+                    "کدام تصویر را می خواهید دانلود کنید؟",
+                    ("NDVI", "MNDWI")  # حذف گزینه True Color از این لیست
+                )
+
+                # بخش دانلود تصاویر
+                st.subheader("download image")
+                if download_choice == "NDVI":
+                    download_image(ndvi, "ndvi_image.tif", region, scale)
+                elif download_choice == "MNDWI":
+                    download_image(mndwi, "mndwi_image.tif", region, scale)
     except Exception as e:
         st.error(f"خطا در پردازش Shapefile یا محاسبه شاخص‌ها: {str(e)}")
 
@@ -193,18 +208,3 @@ def download_image(image, filename, region, scale):
         geemap.ee_export_image(image, filename=temp_path, scale=scale, region=region.geometry().bounds())
         with open(temp_path, "rb") as f:
             st.download_button(label=f"download {filename}", data=f, file_name=filename, mime="image/tiff")
-
-# اضافه کردن radiobutton برای انتخاب تصویر
-download_choice = st.radio(
-    "کدام تصویر را می خواهید دانلود کنید؟",
-    ("NDVI", "MNDWI", "True Color")
-)
-
-# بخش دانلود تصاویر
-st.subheader("download image")
-if download_choice == "NDVI":
-    download_image(ndvi, "ndvi_image.tif", region, scale)
-elif download_choice == "MNDWI":
-    download_image(mndwi, "mndwi_image.tif", region, scale)
-elif download_choice == "True Color":
-    download_image(image, "true_color_image.tif", region, scale)
